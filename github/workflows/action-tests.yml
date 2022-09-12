@@ -1,0 +1,24 @@
+name: Testes Integrados de API com Newman
+
+on:
+  pull_request:
+    branches:
+    - master
+  push:
+    branches:
+    - master
+
+jobs:
+
+  newman-test:
+    uses: Vis-Rodrigues/workflow-template/.github/workflows/test-api-newman.yml@v2
+    with:
+      collection: StarWars.postman_collection.json
+      environment: postman_environment_prd
+      artifact_name: report
+
+  deploy-github-page:
+    uses: Vis-Rodrigues/workflow-template/.github/workflows/deploy-github-page.yml@v2
+    needs: [newman-test]
+    with:
+      artifact_download: report

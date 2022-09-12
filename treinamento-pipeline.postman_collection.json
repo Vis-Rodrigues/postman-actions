@@ -1,0 +1,368 @@
+{
+	"info": {
+		"_postman_id": "272a680c-75f7-4c4f-9aa6-c86eeb35e18a",
+		"name": "treinamento-pipeline",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20004161"
+	},
+	"item": [
+		{
+			"name": "Consulta Todos Livros",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validação do status code 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Validação do body da resposta\", function () {",
+							"",
+							"    for (i = 0; i < jsonData.length; i++) {",
+							"        var obj = jsonData[i];",
+							"        var id = i + 1;",
+							"",
+							"        console.info(\"Validação do livro na posição \" + id +",
+							"            \"\\ncom body: \" + JSON.stringify(obj));",
+							"",
+							"        pm.expect(obj.id, \"Validação do campo id\").to.eql(id);",
+							"        pm.expect(obj.title, \"Validação do campo title\").to.eql(\"Book \" + id);",
+							"        pm.expect(obj.description, \"Validação do campo description preenchido\").to.not.null;",
+							"        pm.expect(obj.publishDate, \"Validação do formato data no campo publishDate\").to.matches(/\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3,}\\+\\d{2}:\\d{2}/);",
+							"    }",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consulta Livro por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validação do status code 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validação do body da resposta\", function () {",
+							"    var jsonData = pm.response.json();",
+							"",
+							"    pm.expect(jsonData.id, \"Validação do campo id\").to.eql(1);",
+							"    pm.expect(jsonData.title, \"Validação do campo title\").to.eql(\"Book 1\");",
+							"    pm.expect(jsonData.description, \"Validação do campo description\").to.eql(\"Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\\n\");",
+							"    pm.expect(jsonData.pageCount, \"Validação do campo pageCount\").to.eql(100);",
+							"    pm.expect(jsonData.excerpt, \"Validação do campo excerpt\").to.eql(\"Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\\n\");",
+							"    pm.expect(jsonData.publishDate, \"Validação do formato data no campo publishDate\").to.matches(/\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3,}\\+\\d{2}:\\d{2}/);",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/books/{{id_livro}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"books",
+						"{{id_livro}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastro Livro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validação do status code 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test('Validação do esquema da resposta', function () {",
+							"    const schema = {",
+							"        \"properties\": {",
+							"            \"id\": {",
+							"                \"type\": \"number\"",
+							"            },",
+							"            \"title\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"description\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"excerpt\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"pageCount\": {",
+							"                \"type\": \"number\"",
+							"            },",
+							"            \"publishDate\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"        }",
+							"    };",
+							"    pm.response.to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"pm.test(\"Validação do body da resposta\", function () {",
+							"    var request = JSON.parse(pm.request.body);",
+							"    var response = pm.response.json();",
+							"",
+							"    pm.expect(request.id, \"Validação do campo id\").to.eql(response.id);",
+							"    pm.expect(request.title, \"Validação do campo title\").to.eql(response.title);",
+							"    pm.expect(request.description, \"Validação do campo description\").to.eql(response.description);",
+							"    pm.expect(request.pageCount, \"Validação do campo pageCount\").to.eql(response.pageCount);",
+							"    pm.expect(request.excerpt, \"Validação do campo excerpt\").to.eql(response.excerpt);",
+							"    pm.expect(request.publishDate, \"Validação do campo publishDate\").to.eql(response.publishDate);",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var moment = require('moment');",
+							"",
+							"pm.collectionVariables.set(\"timestamp\",  moment().subtract(1, 'day').format((\"YYYY-MM-DDThh:mm:ss\")));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 1,\n  \"title\": \"{{$randomFirstName}}\",\n  \"description\": \"{{$randomLoremSentence}}\",\n  \"pageCount\": {{$randomInt}},\n  \"excerpt\": \"{{$randomLoremSentences}}\",\n  \"publishDate\": \"{{timestamp}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar Livro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validação do status code 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test('Validação do esquema da resposta', function () {",
+							"    const schema = {",
+							"        \"properties\": {",
+							"            \"id\": {",
+							"                \"type\": \"number\"",
+							"            },",
+							"            \"title\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"description\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"excerpt\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"pageCount\": {",
+							"                \"type\": \"number\"",
+							"            },",
+							"            \"publishDate\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"        }",
+							"    };",
+							"    pm.response.to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"pm.test(\"Validação do body da resposta\", function () {",
+							"    var request = JSON.parse(pm.request.body);",
+							"    var response = pm.response.json();",
+							"",
+							"    pm.expect(request.id, \"Validação do campo id\").to.eql(response.id);",
+							"    pm.expect(request.title, \"Validação do campo title\").to.eql(response.title);",
+							"    pm.expect(request.description, \"Validação do campo description\").to.eql(response.description);",
+							"    pm.expect(request.pageCount, \"Validação do campo pageCount\").to.eql(response.pageCount);",
+							"    pm.expect(request.excerpt, \"Validação do campo excerpt\").to.eql(response.excerpt);",
+							"    pm.expect(request.publishDate, \"Validação do campo publishDate\").to.eql(response.publishDate);",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var moment = require('moment');",
+							"",
+							"pm.collectionVariables.set(\"timestamp\",  moment().subtract(1, 'day').format((\"YYYY-MM-DDThh:mm:ss\")));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 1,\n  \"title\": \"{{$randomFirstName}}\",\n  \"description\": \"{{$randomLoremSentence}}\",\n  \"pageCount\": {{$randomInt}},\n  \"excerpt\": \"{{$randomLoremSentences}}\",\n  \"publishDate\": \"{{timestamp}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/books/{{id_livro}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"books",
+						"{{id_livro}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar Livro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validação do status code 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Validação do body da resposta vazio\", function () {",
+							"    pm.expect(pm.response.text()).is.empty;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/books/{{id_livro}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"books",
+						"{{id_livro}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Validação do tempo de resposta menor que 300ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(300);",
+					"});",
+					"",
+					"pm.test(\"Validação do header api-supported-versions presente\", function () {",
+					"    pm.response.to.have.header(\"api-supported-versions\");",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "timestamp",
+			"value": ""
+		}
+	]
+}
