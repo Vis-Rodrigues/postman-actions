@@ -13,7 +13,7 @@ jobs:
   newman-test:
     uses: Vis-Rodrigues/workflow-template/.github/workflows/test-api-newman.yml@v2
     with:
-      collection: treinamento-pipeline.postman_collection.json
+      collection: treinamento-pipeline.postman_collection
       environment: environment-qa.postman_environment
       artifact_name: report
 
