@@ -10,15 +10,65 @@ on:
 
 jobs:
 
-  newman-test:
-    uses: Vis-Rodrigues/workflow-template/.github/workflows/test-api-newman.yml@v2
-    with:
-      collection: treinamento-pipeline.postman_collection
-      environment: environment-qa.postman_environment
-      artifact_name: report
+  # newman-test:
+  #   uses: Vis-Rodrigues/workflow-template/.github/workflows/test-api-newman.yml@v2
+  #   with:
+  #     collection: treinamento-pipeline.postman_collection
+  #     environment: environment-qa.postman_environment
+  #     artifact_name: report
 
-  deploy-github-page:
-    uses: Vis-Rodrigues/workflow-template/.github/workflows/deploy-github-page.yml@v2
-    needs: [newman-test]
-    with:
-      artifact_download: report
+  # deploy-github-page:
+  #   uses: Vis-Rodrigues/workflow-template/.github/workflows/deploy-github-page.yml@v2
+  #   needs: [newman-test]
+  #   with:
+  #     artifact_download: report
+
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - name: Instalar node
+      uses: actions/setup-node@v2
+      with: 
+        node-version: '14.x'
+    
+    - name: Instalar newman
+      run: |
+       npm install -g newman newman-reporter-htmlextra
+    
+    - name: Testes com Newman
+      continue-on-error: true
+      run: |
+       mkdir -p report
+       newman run treinamento-pipeline.postman_collection.json \
+       -e environment-qa.postman_environment.json \
+       -r htmlextra --reporter-htmlextra-export report/index.html \
+       ${{ inputs.extra_options }}
+    - name: Upload relatório da execucao dos testes
+      uses: actions/upload-artifact@v3
+      with: 
+       name: report
+       path: report
+       retention-days: 1
+
+  github-page:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+     
+      - name: Download a Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: report
+          path: report
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: report
