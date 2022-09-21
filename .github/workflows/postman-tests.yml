@@ -62,8 +62,8 @@ jobs:
     needs: test-api
 
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
+      # - name: Checkout Repo
+      #   uses: actions/checkout@v2
      
       - name: Download a Artifact
         uses: actions/download-artifact@v3.0.0
