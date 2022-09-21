@@ -1,6 +1,7 @@
 https://vis-rodrigues.github.io/postman-actions/
 # Testes com Newman + Pipeline
 [![Testes de API com Newman](https://github.com/Vis-Rodrigues/postman-actions/actions/workflows/postman-tests.yml/badge.svg)](https://github.com/Vis-Rodrigues/postman-actions/actions/workflows/postman-tests.yml)
+[![pages-build-deployment](https://github.com/Vis-Rodrigues/postman-actions/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Vis-Rodrigues/postman-actions/actions/workflows/pages/pages-build-deployment)
 
 Relatório da última execução: https://vis-rodrigues.github.io/postman-actions/
 

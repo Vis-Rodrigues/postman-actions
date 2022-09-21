@@ -30,16 +30,16 @@ jobs:
     steps:
     
     - name: Checkout Repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Instalar node
       uses: actions/setup-node@v2
       with: 
         node-version: '14.x'
     
-    # - name: Instalar newman
-    #   run: |
-    #    npm install -g newman newman-reporter-htmlextra
+    - name: Instalar newman
+      run: |
+       npm install -g newman newman-reporter-htmlextra
     
     - name: Testes com Newman
       continue-on-error: true
@@ -62,9 +62,7 @@ jobs:
     needs: test-api
 
     steps:
-      # - name: Checkout Repo
-      #   uses: actions/checkout@v2
-     
+      - uses: actions/checkout@v3
       - name: Download a Artifact
         uses: actions/download-artifact@v3.0.0
         with:
