@@ -65,11 +65,11 @@ jobs:
       # - name: Checkout Repo
       #   uses: actions/checkout@v2
      
-      - name: Download a Artifact
-        uses: actions/download-artifact@v3.0.0
-        with:
-          name: report
-          path: report
+      # - name: Download a Artifact
+      #   uses: actions/download-artifact@v3.0.0
+      #   with:
+      #     name: report
+      #     path: report
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
