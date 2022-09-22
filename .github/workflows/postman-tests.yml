@@ -48,7 +48,7 @@ jobs:
        mkdir -p report
        newman run treinamento-pipeline.postman_collection.json \
        -e environment-qa.postman_environment.json \
-       -r htmlextra --reporter-htmlextra-export report/index.html \
+       -r cli, htmlextra --reporter-htmlextra-export report/index.html \
        ${{ inputs.extra_options }}
     
     - name: Output summary to console
