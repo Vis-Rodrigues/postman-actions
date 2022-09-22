@@ -43,12 +43,12 @@ jobs:
     
     - name: Testes com Newman
       id: run-newman
-      continue-on-error: true
+      # continue-on-error: true
       run: |
        mkdir -p report
        newman run treinamento-pipeline.postman_collection.json \
        -e environment-qa.postman_environment.json \
-       -r cli,junit.json \
+       -r cli,junit,json \
        -r htmlextra --reporter-htmlextra-export report/index.html \
        -- color on \
        ${{ inputs.extra_options }}
