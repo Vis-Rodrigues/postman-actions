@@ -44,7 +44,7 @@ jobs:
     
     - name: Testes com Newman
       id: run-newman
-      # continue-on-error: true
+      continue-on-error: true
       run: |
        mkdir -p report
        newman run treinamento-pipeline.postman_collection.json \
