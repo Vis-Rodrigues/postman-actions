@@ -27,7 +27,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!
+        run: echo Hello, world! && exit 1
         
       - name: Send mail
         if: always()
@@ -44,7 +44,7 @@ jobs:
     # Optional (recommended) mail server password:
           password: ${{secrets.EMAIL_PASSWORD}}
     # Required mail subject:
-          subject: ${{ github.job }} job do ${{ github.repository }} finalizou o workflow com ${{ job.status }}
+          subject: Os testes do ${{ github.repository }} executaram com ${{ job.status }}
     # Required recipients' addresses:
           to: vi_ale10@hotmail.com,vis.ale10@gmail.com
           secure: true
@@ -53,4 +53,5 @@ jobs:
           from: VisTech # <user@example.com>
     # Optional plain body:
           body: Teste de envio de e-mail!! Graças a Deus deu certo!!
+          attachments: environment-qa.postman_environment.json          
 
