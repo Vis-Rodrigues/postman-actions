@@ -42,6 +42,7 @@ jobs:
        npm install -g newman newman-reporter-htmlextra
     
     - name: Testes com Newman
+      id: run-newman
       continue-on-error: true
       run: |
        mkdir -p report
@@ -49,6 +50,10 @@ jobs:
        -e environment-qa.postman_environment.json \
        -r htmlextra --reporter-htmlextra-export report/index.html \
        ${{ inputs.extra_options }}
+    
+    - name: Output summary to console
+      run: echo ${{ steps.run-newman.outputs.summary }}
+    
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
       with: 
