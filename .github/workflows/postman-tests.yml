@@ -40,7 +40,7 @@ jobs:
     
     - name: Instalar newman
       run: |
-       npm install -g newman newman-reporter-htmlextra
+       npm install -g newman newman-reporter-htmlextra @decathlon/newman-reporter-pullrequest-decorator
     
     - name: Testes com Newman
       id: run-newman
@@ -51,11 +51,20 @@ jobs:
        -e environment-qa.postman_environment.json \
        -r cli,junit,json \
        -r htmlextra --reporter-htmlextra-export report/index.html \
+       -r @decathlon/pullrequest-decorator \
        -- color on \
        ${{ inputs.extra_options }}
     
     - name: Output summary to console
       run: echo ${{ steps.run-newman.outputs.summary }}
+
+    - name: Newman report comment
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: |
+        newman run treinamento-pipeline.postman_collection.json --environment=environment-qa.postman_environment.json \
+        -r @decathlon/pullrequest-decorator \
+        --reporter-export report/index2.html
     
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
