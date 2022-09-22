@@ -1,6 +1,7 @@
 name: Testes Integrados de API com Newman
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
     - master
