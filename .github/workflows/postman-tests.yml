@@ -51,7 +51,6 @@ jobs:
        -e environment-qa.postman_environment.json \
        -r cli,junit,json \
        -r htmlextra --reporter-htmlextra-export report/index.html \
-       -r @decathlon/pullrequest-decorator \
        -- color on \
        ${{ inputs.extra_options }}
     
