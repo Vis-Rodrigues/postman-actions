@@ -51,6 +51,7 @@ jobs:
        -e environment-qa.postman_environment.json \
        -r cli,junit,json \
        -r htmlextra --reporter-htmlextra-export report/index.html \
+       -r json-summary --reporter-summary-json-export output \
        -- color on \
        ${{ inputs.extra_options }}
     
