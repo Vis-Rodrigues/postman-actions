@@ -75,7 +75,7 @@ jobs:
       with:
         message: |
           Como vai? Estou bem graças a Deus!
-          ${{ steps.comment.outputs.report }}
+          report/index2.html
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'Vivi' # The user.login for temporary GitHub tokens
         allow-repeats: false # This is the default
@@ -84,7 +84,7 @@ jobs:
       uses: peter-evans/create-or-update-comment@v2
       with:
         issue-number: 1
-        body: ${{ steps.comment.outputs.report }}
+        body: report/index2.html
 
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
