@@ -33,6 +33,16 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      
+      # informe o name do artefato do job de Upload
+      - name: Download a Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: report
+          path: report
+
+      - name: ls repositorio
+        run: ls
         
       - name: Send mail
         if: always()
