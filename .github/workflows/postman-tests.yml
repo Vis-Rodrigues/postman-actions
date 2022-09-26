@@ -72,13 +72,19 @@ jobs:
         --reporter-export report/index2.html
     
     - uses: mshick/add-pr-comment@v1
-        with:
-          message: |
-            Como vai? Estou bem graças a Deus!
-            ${{ steps.comment.outputs.report }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          repo-token-user-login: 'Vivi' # The user.login for temporary GitHub tokens
-          allow-repeats: false # This is the default
+      with:
+        message: |
+          Como vai? Estou bem graças a Deus!
+          ${{ steps.comment.outputs.report }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        repo-token-user-login: 'Vivi' # The user.login for temporary GitHub tokens
+        allow-repeats: false # This is the default
+
+    - name: Create comment
+      uses: peter-evans/create-or-update-comment@v2
+      with:
+        issue-number: 1
+        body: ${{ steps.comment.outputs.report }}
 
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
