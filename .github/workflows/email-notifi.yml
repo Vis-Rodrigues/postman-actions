@@ -46,7 +46,7 @@ jobs:
     # Required mail subject:
           subject: Os testes do ${{ github.repository }} executaram com ${{ job.status }}
     # Required recipients' addresses:
-          to: vi_ale10@hotmail.com,vis.ale10@gmail.com
+          to: vi_ale10@hotmail.com,vis.ale10@gmail.com,ldacosta461@gmail.com
           secure: true
           ignore_cert: true
     # Required sender full name (address can be skipped):
