@@ -70,6 +70,15 @@ jobs:
         newman run treinamento-pipeline.postman_collection.json --environment=environment-qa.postman_environment.json -r @decathlon/pullrequest-decorator \
         --reporter-export report/index2.html
     
+    - uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            Como vai? Estou bem graças a Deus!
+            report/index2.html
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'Vivi' # The user.login for temporary GitHub tokens
+          allow-repeats: false # This is the default
+
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
       with: 
