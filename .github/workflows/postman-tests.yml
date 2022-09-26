@@ -64,6 +64,7 @@ jobs:
       run: npm install -g @decathlon/newman-reporter-pullrequest-decorator
 
     - name: Newman report comment
+      id: comment
       continue-on-error: true
       if: github.event_name == 'pull_request'
       run: |
@@ -74,7 +75,7 @@ jobs:
         with:
           message: |
             Como vai? Estou bem graças a Deus!
-            report/index2.html
+            ${{ steps.comment.outputs.report }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'Vivi' # The user.login for temporary GitHub tokens
           allow-repeats: false # This is the default
