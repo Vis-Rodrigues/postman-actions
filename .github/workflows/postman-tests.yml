@@ -7,7 +7,9 @@ on:
   push:
     branches:
     - master
-
+    - email
+  workflow_dispatch:
+  
 jobs:
 
   newman-test:
@@ -22,3 +24,39 @@ jobs:
     needs: [newman-test]
     with:
       artifact_download: report
+      
+  send-email:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        
+      - name: Send mail
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+    # Specify connection via URL (replaces server_address, server_port, secure,
+    # username and password)
+    # Required mail server address if not connection_url:
+          server_address: smtp.gmail.com
+    # Server port, default 25:
+          server_port: 465
+    # Optional (recommended): mail server username:
+          username: ${{secrets.EMAIL_USERNAME}}
+    # Optional (recommended) mail server password:
+          password: ${{secrets.EMAIL_PASSWORD}}
+    # Required mail subject:
+          subject: Os testes do ${{ github.repository }} executaram com ${{ job.status }}
+    # Required recipients' addresses:
+          to: vi_ale10@hotmail.com,vis.ale10@gmail.com
+          secure: true
+          ignore_cert: true
+    # Required sender full name (address can be skipped):
+          from: VisTech # <user@example.com>
+    # Optional plain body:
+          body: Teste de envio de e-mail!! Graças a Deus deu certo!!
+          attachments: report/index.html
+      
