@@ -348,8 +348,8 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"pm.test(\"Validação do tempo de resposta menor que 300ms\", function () {",
-					"    pm.expect(pm.response.responseTime).to.be.below(300);",
+					"pm.test(\"Validação do tempo de resposta menor que 9000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(9000);",
 					"});",
 					"",
 					"pm.test(\"Validação do header api-supported-versions presente\", function () {",
