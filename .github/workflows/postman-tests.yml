@@ -95,7 +95,7 @@ jobs:
       with:
         message: |
           Como vai? Estou bem graças a Deus!
-          echo ${{ steps.run-newman.outputs.summary }}
+          ${{ steps.run-newman.outputs.summary }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload relatório da execucao dos testes
