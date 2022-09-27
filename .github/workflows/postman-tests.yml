@@ -68,6 +68,6 @@ jobs:
           from: VisTech # <user@example.com>
     # Optional plain body:
           #body: Teste de envio de e-mail!! Graças a Deus deu certo!!
-          html_body: file://report/index.html
-          #attachments: report/index.html
+          html_body: file://template-email-v2.html
+          attachments: report/index.html
       
