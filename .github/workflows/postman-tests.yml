@@ -9,6 +9,10 @@ on:
     branches:
     - master
 
+env:
+  COLLECTION: treinamento-pipeline.postman_collection.json
+  ENVIROMENT: environment-qa.postman_environment.json
+
 jobs:
 
   # newman-test:
@@ -23,9 +27,6 @@ jobs:
   #   needs: [newman-test]
   #   with:
   #     artifact_download: report
-env:
-  COLLECTION: treinamento-pipeline.postman_collection.json
-  ENVIROMENT: environment-qa.postman_environment.json
 
   test-api:
     name: Testes de API com Newman
