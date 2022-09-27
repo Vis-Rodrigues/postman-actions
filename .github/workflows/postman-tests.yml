@@ -72,10 +72,11 @@ jobs:
       run: echo ${{ steps.run-newman.outputs.summary }}
     
     - name: save result
+      env:
+        result: ${{ steps.run-newman.outputs.summary }}
       run: |
-        $env_result = ${{ steps.run-newman.outputs.summary }}
-        echo $env_result
-        echo $env_result.Run.Stats.Requests.total
+        echo ${{env.result}}
+        # echo $env_result.Run.Stats.Requests.total
 
     - uses: mshick/add-pr-comment@v1
       if: github.event_name == 'pull_request'
