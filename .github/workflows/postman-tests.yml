@@ -75,7 +75,7 @@ jobs:
       env:
         result: ${{ steps.run-newman.outputs.summary }}
       run: |
-        echo ${{ env.result }}
+        echo $env.result
         echo $env_result.Run.Stats.Requests.total
 
     - uses: mshick/add-pr-comment@v1
