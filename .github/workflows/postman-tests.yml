@@ -43,9 +43,8 @@ env:
     
     - name: Instalar newman
       run: |
-       npm install -g newman
-       npm install -g newman-reporter-slackreporter
-       npm install -g newman-reporter-htmlextra
+       npm install -g newman newman-reporter-htmlextra & \
+       npm i newman-reporter-json-summary
     
     - name: Testes com Newman
       continue-on-error: true
@@ -53,7 +52,7 @@ env:
        mkdir -p report
        newman run ${{ env.COLLECTION }} \
        -e environment-qa.postman_environment.json \
-       -r slackreporter,htmlextra --reporter-htmlextra-export report/htmlreport.html \
+       -r cli,junit,json \
        -r htmlextra --reporter-htmlextra-export report/index.html \
        -r json-summary --reporter-summary-json-export output \
        -- color on \
@@ -71,6 +70,12 @@ env:
     - name: Output summary to console
       run: echo ${{ steps.run-newman.outputs.summary }}
     
+    - name: save result
+      run: |
+        env_result = ${{ fromJson(steps.run-newman.outputs.summary) }}
+        echo $env_result
+        echo $env_result.Run.Stats.Requests.total
+
     - uses: mshick/add-pr-comment@v1
       if: github.event_name == 'pull_request'
       with:
