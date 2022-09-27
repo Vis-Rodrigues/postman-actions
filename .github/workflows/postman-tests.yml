@@ -85,6 +85,9 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         message: |
+          |Total|Pending|Failed|
+          |--|--|--|
+          |2|2|2|
           "Total de requisições ${{ steps.data.outputs.total }}"
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
