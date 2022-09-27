@@ -76,7 +76,7 @@ jobs:
 
 
     - name: Newman report comment
-      id: comment
+      id: comment2
       continue-on-error: true
       if: github.event_name == 'pull_request'
       run: |
