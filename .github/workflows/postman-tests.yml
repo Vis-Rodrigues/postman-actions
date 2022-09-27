@@ -73,7 +73,7 @@ jobs:
     
     - name: save result
       run: |
-        env_result = ${{ fromJson(steps.run-newman.outputs.summary) }}
+        env_result = ${{ steps.run-newman.outputs.summary }}
         echo $env_result
         echo $env_result.Run.Stats.Requests.total
 
