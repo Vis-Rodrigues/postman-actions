@@ -76,15 +76,9 @@ jobs:
       with:
         json: ${{ steps.run-newman.outputs.summary }}
         total: "Collection.Run.Stats.Requests.total"
-    - run: "echo Total ${{ steps.data.outputs.total }}"
-
-
-    - name: save result
-      env:
-        result: ${{ steps.run-newman.outputs.summary }}
-      run: |
-        echo $env.result
-        echo ${{ env.result.Collection.Run.Stats.Requests.total }}
+    
+    - name: show result 
+      run: "echo Total ${{ steps.data.outputs.total }}"
 
     - uses: mshick/add-pr-comment@v1
       if: github.event_name == 'pull_request'
