@@ -53,8 +53,7 @@ env:
        mkdir -p report
        newman run ${{ env.COLLECTION }} \
        -e environment-qa.postman_environment.json \
-       -r slackreporter,htmlextra \
-       --reporter-htmlextra-export report/htmlreport.html \
+       -r slackreporter,htmlextra --reporter-htmlextra-export report/htmlreport.html \
        -r htmlextra --reporter-htmlextra-export report/index.html \
        -r json-summary --reporter-summary-json-export output \
        -- color on \
