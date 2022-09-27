@@ -76,6 +76,7 @@ jobs:
       uses: gr2m/get-json-paths-action@v1.x
       with:
         json: ${{ steps.run-newman.outputs.summary }}
+        total: "Run.Stats.Requests.total"
     
     - name: show result 
       run: "echo Total ${{ steps.data.outputs.total }}"
@@ -84,7 +85,7 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         message: |
-          ${{ steps.run-newman.outputs.summary }}
+          "Total de requisições ${{ steps.data.outputs.total }}"
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload relatório da execucao dos testes
