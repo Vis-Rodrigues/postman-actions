@@ -43,7 +43,7 @@ env:
     
     - name: Instalar newman
       run: |
-       npm install -g newman newman-reporter-htmlextra @decathlon/newman-reporter-pullrequest-decorator & \
+       npm install -g newman newman-reporter-htmlextra & \
        npm i newman-reporter-json-summary
     
     - name: Testes com Newman
@@ -69,19 +69,11 @@ env:
 
     - name: Output summary to console
       run: echo ${{ steps.run-newman.outputs.summary }}
-
-    - name: Newman report comment
-      id: comment2
-      continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: |
-        newman run treinamento-pipeline.postman_collection.json --environment=environment-qa.postman_environment.json -r @decathlon/pullrequest-decorator \
-        --reporter-export report/index2.html
     
     - uses: mshick/add-pr-comment@v1
+      if: github.event_name == 'pull_request'
       with:
         message: |
-          Como vai? Estou bem graças a Deus!
           ${{ steps.run-newman.outputs.summary }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
