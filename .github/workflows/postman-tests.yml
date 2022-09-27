@@ -24,6 +24,15 @@ jobs:
   #   with:
   #     artifact_download: report
 
+  verify-json-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate JSON
+        uses: docker://orrosenblatt/validate-json-action:latest
+        env:
+          INPUT_JSONS: treinamento-pipeline.postman_collection.json
+  
   test-api:
     name: Testes de API com Newman
     runs-on: ubuntu-latest
@@ -66,22 +75,6 @@ jobs:
 
     - name: Output summary to console
       run: echo ${{ steps.run-newman.outputs.summary }}
-
-    - name: Install comment PR
-      if: github.event_name == 'pull_request'
-      run: npm install -g @decathlon/newman-reporter-pullrequest-decorator
-
-    - name: Newman report comment
-      id: comment
-      continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: |
-        newman run treinamento-pipeline.postman_collection.json --environment=environment-qa.postman_environment.json -r @decathlon/pullrequest-decorator \
-        --reporter-pullrequest-decorator-repo ${{ github.repository }} \
-        --reporter-pullrequest-decorator-token ${{ secrets.GITHUB_TOKEN }} \
-        --reporter-pullrequest-decorator-checkname vivi \
-        --reporter-pullrequest-decorator-refcommit ${{ github.event.pull_request.head.sha }}
-
 
     - name: Newman report comment
       id: comment2
