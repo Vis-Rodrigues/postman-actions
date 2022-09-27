@@ -1,4 +1,4 @@
-name: JSON check
+name: Lint JSON
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: json-syntax-check
+      - name: lint-json
         uses: limitusus/json-syntax-check@v1
         with:
           pattern: "\\.json$"
