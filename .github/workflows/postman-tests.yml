@@ -76,10 +76,10 @@ jobs:
       uses: gr2m/get-json-paths-action@v1.x
       with:
         json: ${{ steps.run-newman.outputs.summary }}
-        total: "Run.Stats.Requests.total"
+        # total: "Run.Stats.Requests.total"
     
     - name: show result 
-      run: "echo Total ${{ steps.data.outputs.total }}"
+      run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
     - uses: mshick/add-pr-comment@v1
       if: github.event_name == 'pull_request'
