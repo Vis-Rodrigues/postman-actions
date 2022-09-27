@@ -59,7 +59,7 @@ jobs:
     # Optional (recommended) mail server password:
           password: ${{secrets.EMAIL_PASSWORD}}
     # Required mail subject:
-          subject: Os testes do ${{ github.repository }} executaram com ${{ job.status }}
+          subject: Relatório de execução dos testes - ${{ github.repository }}
     # Required recipients' addresses:
           to: vi_ale10@hotmail.com,vis.ale10@gmail.com
           secure: true
