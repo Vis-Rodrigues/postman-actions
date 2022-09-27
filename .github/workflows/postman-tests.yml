@@ -43,8 +43,9 @@ env:
     
     - name: Instalar newman
       run: |
-       npm install -g newman newman-reporter-htmlextra & \
-       npm i newman-reporter-json-summary
+       npm install -g newman
+       npm install -g newman-reporter-slackreporter
+       npm install -g newman-reporter-htmlextra
     
     - name: Testes com Newman
       continue-on-error: true
@@ -52,7 +53,8 @@ env:
        mkdir -p report
        newman run ${{ env.COLLECTION }} \
        -e environment-qa.postman_environment.json \
-       -r cli,junit,json \
+       -r slackreporter,htmlextra \
+       --reporter-htmlextra-export report/htmlreport.html
        -r htmlextra --reporter-htmlextra-export report/index.html \
        -r json-summary --reporter-summary-json-export output \
        -- color on \
