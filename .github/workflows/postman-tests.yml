@@ -76,7 +76,7 @@ jobs:
       uses: gr2m/get-json-paths-action@v1.x
       with:
         json: ${{ steps.run-newman.outputs.summary }}
-        total: "Collection.Run.Stats.Requests.total"
+        total: "Run.Stats.Requests.total"
     
     - name: show result 
       run: "echo Total ${{ steps.data.outputs.total }}"
