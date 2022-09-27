@@ -44,7 +44,6 @@ jobs:
        npm i newman-reporter-json-summary
     
     - name: Testes com Newman
-      id: run-newman
       continue-on-error: true
       run: |
        mkdir -p report
@@ -56,6 +55,15 @@ jobs:
        -- color on \
        ${{ inputs.extra_options }}
     
+    - name: Run API Tests
+      id: run-newman
+      continue-on-error: true
+      uses: anthonyvscode/newman-action@v1
+      with:
+        collection: treinamento-pipeline.postman_collection.json
+        environment: environment-qa.postman_environment.json
+        reporters: cli
+
     - name: Output summary to console
       run: echo ${{ steps.run-newman.outputs.summary }}
 
