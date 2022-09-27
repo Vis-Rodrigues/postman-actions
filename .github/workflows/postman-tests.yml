@@ -8,6 +8,7 @@ on:
   push:
     branches:
     - master
+    - comment2
 
 env:
   COLLECTION: treinamento-pipeline.postman_collection.json
