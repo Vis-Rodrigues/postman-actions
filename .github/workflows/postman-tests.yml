@@ -99,9 +99,10 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         message: |
-          |Total|Pending|Failed|
+          ||executed|failed|
           |--|--|--|
-          |${{ env.Run.Stats.Requests.total }}|2|2|
+          |requests|${{ env.Run.Stats.Requests.total }}|${{ env.Run.Stats.Requests.failed }}|
+          |assertions|${{ env.Run.Stats.Assertions.total }}|${{ env.Run.Stats.Assertions.failed }}|
           "Total de requisições ${{ steps.data.outputs.total }}"
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
