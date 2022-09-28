@@ -89,7 +89,7 @@ jobs:
         message: |
           |Total|Pending|Failed|
           |--|--|--|
-          |$env.result|2|2|
+          |${{ env.result }}|2|2|
           "Total de requisições ${{ steps.data.outputs.total }}"
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
