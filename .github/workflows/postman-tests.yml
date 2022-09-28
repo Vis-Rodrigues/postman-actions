@@ -103,12 +103,12 @@ jobs:
     #       "Total de requisições ${{ steps.data.outputs.total }}"
     #     repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-    # - name: Upload relatório da execucao dos testes
-    #   uses: actions/upload-artifact@v3
-    #   with: 
-    #    name: report
-    #    path: report
-    #    retention-days: 1
+    - name: Upload relatório da execucao dos testes
+      uses: actions/upload-artifact@v3
+      with: 
+       name: report
+       path: report
+       retention-days: 1
 
   # github-page:
   #   name: Deploy to GitHub Pages
