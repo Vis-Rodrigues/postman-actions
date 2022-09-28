@@ -95,12 +95,22 @@ jobs:
     #     result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
     #   run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
-    - uses: GuillaumeFalourd/convert-json-to-env@v1
+    - name: JSON to variables
+      uses: rgarcia-phi/json-to-variables@v1.1.0
       with:
-        json_file: $REPORT_JSON_PATH
+        filename: $REPORT_JSON_PATH
+        prefix: result
+        # masked: true
     
-    - name: Output summary to console
-      run: echo ${{ env.Run.Stats.Requests.total }}
+    - name: Show output
+      run: echo "The time was ${{ env.result_Collection }}"
+
+    # - uses: GuillaumeFalourd/convert-json-to-env@v1
+    #   with:
+    #     json_file: $REPORT_JSON_PATH
+    
+    # - name: Output summary to console
+    #   run: echo ${{ env.Run.Stats.Requests.total }}
 
     - uses: mshick/add-pr-comment@v1
       if: github.event_name == 'pull_request'
