@@ -95,7 +95,6 @@ jobs:
     #     result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
     #   run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
-
   github-page:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
@@ -115,20 +114,20 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: report
 
-    - uses: GuillaumeFalourd/convert-json-to-env@v1
-      with:
-        json_file: $REPORT_JSON_PATH
-    
-    - name: Output summary to console
-      run: echo ${{ env.Run.Stats.Requests.total }}
+      - uses: GuillaumeFalourd/convert-json-to-env@v1
+        with:
+          json_file: $REPORT_JSON_PATH
+      
+      - name: Output summary to console
+        run: echo ${{ env.Run.Stats.Requests.total }}
 
-    - uses: mshick/add-pr-comment@v1
-      if: github.event_name == 'pull_request'
-      with:
-        message: |
-          ||executed|failed|
-          |--|--|--|
-          |requests|${{ env.Run.Stats.Requests.total }}|${{ env.Run.Stats.Requests.failed }}|
-          |assertions|${{ env.Run.Stats.Assertions.total }}|${{ env.Run.Stats.Assertions.failed }}|
-          "Total de requisições ${{ steps.data.outputs.total }}"
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: mshick/add-pr-comment@v1
+        if: github.event_name == 'pull_request'
+        with:
+          message: |
+            ||executed|failed|
+            |--|--|--|
+            |requests|${{ env.Run.Stats.Requests.total }}|${{ env.Run.Stats.Requests.failed }}|
+            |assertions|${{ env.Run.Stats.Assertions.total }}|${{ env.Run.Stats.Assertions.failed }}|
+            "Total de requisições ${{ steps.data.outputs.total }}"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
