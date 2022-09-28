@@ -105,7 +105,6 @@ jobs:
 
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
-      needs: newman
       with: 
        name: report
        path: report
