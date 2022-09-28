@@ -91,8 +91,7 @@ jobs:
     - uses: GuillaumeFalourd/convert-json-to-env@v1
       run: "echo ${{ steps.run-newman.outputs.summary }} >> result.json"
       with:
-        json_file: result.json
-    - run: echo ${{ env.Run.Stats.Requests.total }} #where "key1" is set on the config.json file
+        json_file: output.json
     
     # - uses: mshick/add-pr-comment@v1
     #   if: github.event_name == 'pull_request'
