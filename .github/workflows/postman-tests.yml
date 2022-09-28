@@ -65,33 +65,33 @@ jobs:
        -- color on \
        ${{ inputs.extra_options }}
     
-    - name: Run API Tests
-      id: run-newman
-      continue-on-error: true
-      uses: anthonyvscode/newman-action@v1
-      with:
-        collection: treinamento-pipeline.postman_collection.json
-        environment: environment-qa.postman_environment.json
-        reporters: cli
+    # - name: Run API Tests
+    #   id: run-newman
+    #   continue-on-error: true
+    #   uses: anthonyvscode/newman-action@v1
+    #   with:
+    #     collection: treinamento-pipeline.postman_collection.json
+    #     environment: environment-qa.postman_environment.json
+    #     reporters: cli
 
-    - name: Output summary to console
-      run: echo ${{ steps.run-newman.outputs.summary }}
+    # - name: Output summary to console
+    #   run: echo ${{ steps.run-newman.outputs.summary }}
     
-    - id: data
-      uses: gr2m/get-json-paths-action@v1.x
-      with:
-        json: ${{ steps.run-newman.outputs.summary }}
-        total: "Run.Stats.Requests.total"
+    # - id: data
+    #   uses: gr2m/get-json-paths-action@v1.x
+    #   with:
+    #     json: ${{ steps.run-newman.outputs.summary }}
+    #     total: "Run.Stats.Requests.total"
     
-    - name: show result 
-      env:
-        result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
-      run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
+    # - name: show result 
+    #   env:
+    #     result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
+    #   run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
-    - uses: GuillaumeFalourd/convert-json-to-env@v1
-      run: "echo ${{ steps.run-newman.outputs.summary }} >> result.json"
-      with:
-        json_file: output.json
+    # - uses: GuillaumeFalourd/convert-json-to-env@v1
+    #   run: "echo ${{ steps.run-newman.outputs.summary }} >> result.json"
+    #   with:
+    #     json_file: output.json
     
     # - uses: mshick/add-pr-comment@v1
     #   if: github.event_name == 'pull_request'
