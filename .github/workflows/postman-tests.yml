@@ -59,8 +59,8 @@ jobs:
        --reporter-htmlextra-logs \
        --reporter-htmlextra-showEnvironmentData \
        --reporter-htmlextra-timezone "America/Sao_Paulo" \
-       --reporter-htmlextra-title ${{ github.event.repository.name }}
-       --reporter-htmlextra-browserTitle ${{ github.event.repository.name }}
+       --reporter-htmlextra-title ${{ github.event.repository.name }} \
+       --reporter-htmlextra-browserTitle ${{ github.event.repository.name }} \
        -r json-summary --reporter-summary-json-export output \
        -- color on \
        ${{ inputs.extra_options }}
