@@ -13,6 +13,7 @@ on:
 env:
   COLLECTION: treinamento-pipeline.postman_collection.json
   ENVIRONMENT: environment-qa.postman_environment.json
+  REPORT_JSON_PATH: "report/result.json"
 
 jobs:
 
@@ -76,9 +77,6 @@ jobs:
     #     environment: environment-qa.postman_environment.json
     #     reporters: cli
 
-    - name: Output summary to console
-      run: cat report/result.json
-    
     # - id: data
     #   uses: gr2m/get-json-paths-action@v1.x
     #   with:
@@ -90,20 +88,22 @@ jobs:
     #     result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
     #   run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
-    # - uses: GuillaumeFalourd/convert-json-to-env@v1
-    #   run: "echo ${{ steps.run-newman.outputs.summary }} >> result.json"
-    #   with:
-    #     json_file: output.json
+    - uses: GuillaumeFalourd/convert-json-to-env@v1
+      with:
+        json_file: $REPORT_JSON_PATH
     
-    # - uses: mshick/add-pr-comment@v1
-    #   if: github.event_name == 'pull_request'
-    #   with:
-    #     message: |
-    #       |Total|Pending|Failed|
-    #       |--|--|--|
-    #       |${{ env.result }}|2|2|
-    #       "Total de requisições ${{ steps.data.outputs.total }}"
-    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Output summary to console
+      run: echo ${{ env.Run.Stats.Requests.total }}
+
+    - uses: mshick/add-pr-comment@v1
+      if: github.event_name == 'pull_request'
+      with:
+        message: |
+          |Total|Pending|Failed|
+          |--|--|--|
+          |${{ env.Run.Stats.Requests.total }}|2|2|
+          "Total de requisições ${{ steps.data.outputs.total }}"
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
