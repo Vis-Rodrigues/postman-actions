@@ -107,8 +107,9 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         message: |
+          # 🚀 Resultado da última execução dos testes
           ||executed|failed|
-          |--|--|--|
+          |--:|--:|--:|
           |requests|${{ env.result_Run_Stats_Requests_total }}|${{ env.result_Run_Stats_Requests_failed }}|
           |assertions|${{ env.result_Run_Stats_Assertions_total }}|${{ env.result_Run_Stats_Assertions_failed }}|
         repo-token: ${{ secrets.GITHUB_TOKEN }}
