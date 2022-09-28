@@ -79,9 +79,9 @@ jobs:
         # total: "Run.Stats.Requests.total"
     
     - name: show result 
-      env:
-        result: ${{ toJson(steps.run-newman.outputs.summary) }}
-      run: "echo Total $env.result.Run.Stats.Requests.total"
+      strategy:
+        matrix: ${{ fromJSON(steps.run-newman.outputs.summary) }}
+      run: "echo Total $matrix"
 
     - uses: mshick/add-pr-comment@v1
       if: github.event_name == 'pull_request'
