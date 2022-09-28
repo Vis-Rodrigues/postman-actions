@@ -111,8 +111,8 @@ jobs:
         message: |
           ||executed|failed|
           |--|--|--|
-          |requests|${{ env.result_Stats_Requests_total }}|${{ env.Run.Stats.Requests.failed }}|
-          |assertions|${{ env.Run.Stats.Assertions.total }}|${{ env.Run.Stats.Assertions.failed }}|
+          |requests|${{ env.result_Stats_Requests_total }}|${{ env.result_Stats_Requests_failed }}|
+          |assertions|${{ env.result_Stats_Assertions_total }}|${{ env.result_Stats_Assertions_failed }}|
           "Total de requisições ${{ steps.data.outputs.total }}"
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
