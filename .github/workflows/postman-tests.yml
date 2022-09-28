@@ -48,17 +48,17 @@ jobs:
        npm install -g newman newman-reporter-htmlextra & \
        npm i newman-reporter-json-summary
     
-    - name: Testes com Newman
-      continue-on-error: true
-      run: |
-       mkdir -p report
-       newman run ${{ env.COLLECTION }} \
-       -e environment-qa.postman_environment.json \
-       -r cli,junit,json \
-       -r htmlextra --reporter-htmlextra-export report/index.html \
-       -r json-summary --reporter-summary-json-export output \
-       -- color on \
-       ${{ inputs.extra_options }}
+    # - name: Testes com Newman
+    #   continue-on-error: true
+    #   run: |
+    #    mkdir -p report
+    #    newman run ${{ env.COLLECTION }} \
+    #    -e environment-qa.postman_environment.json \
+    #    -r cli,junit,json \
+    #    -r htmlextra --reporter-htmlextra-export report/index.html \
+    #    -r json-summary --reporter-summary-json-export output \
+    #    -- color on \
+    #    ${{ inputs.extra_options }}
     
     - name: Run API Tests
       id: run-newman
@@ -89,7 +89,7 @@ jobs:
         message: |
           |Total|Pending|Failed|
           |--|--|--|
-          |2|2|2|
+          |${{ env.result }}|2|2|
           "Total de requisições ${{ steps.data.outputs.total }}"
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
