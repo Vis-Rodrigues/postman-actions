@@ -90,7 +90,7 @@ jobs:
 
     - uses: GuillaumeFalourd/convert-json-to-env@v1
       with:
-        json_file: $REPORT_JSON_PATH
+        json_file: ./$REPORT_JSON_PATH
     
     - name: Output summary to console
       run: echo ${{ env.Run.Stats.Requests.total }}
