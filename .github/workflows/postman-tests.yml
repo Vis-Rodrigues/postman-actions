@@ -12,7 +12,7 @@ on:
 
 env:
   COLLECTION: treinamento-pipeline.postman_collection.json
-  ENVIROMENT: environment-qa.postman_environment.json
+  ENVIRONMENT: environment-qa.postman_environment.json
 
 jobs:
 
