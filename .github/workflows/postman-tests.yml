@@ -80,7 +80,7 @@ jobs:
     
     - name: show result 
       env:
-        result: ${{ fromJson(steps.run-newman.outputs.summary) }}
+        result: ${{ steps.run-newman.outputs.summary }}
       run: "echo Total $env.result.Run.Stats.Requests.total"
 
     - uses: mshick/add-pr-comment@v1
