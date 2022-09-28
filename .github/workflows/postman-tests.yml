@@ -63,7 +63,7 @@ jobs:
        --reporter-htmlextra-timezone "America/Sao_Paulo" \
        --reporter-htmlextra-title ${{ github.event.repository.name }} \
        --reporter-htmlextra-browserTitle ${{ github.event.repository.name }} \
-       --reporter-summary-json-export report/result
+       --reporter-summary-json-export report/result.json
        -- color on \
        ${{ inputs.extra_options }}
     
@@ -76,8 +76,8 @@ jobs:
     #     environment: environment-qa.postman_environment.json
     #     reporters: cli
 
-    # - name: Output summary to console
-    #   run: echo ${{ steps.run-newman.outputs.summary }}
+    - name: Output summary to console
+      run: cat report/result.json
     
     # - id: data
     #   uses: gr2m/get-json-paths-action@v1.x
