@@ -64,7 +64,7 @@ jobs:
        --reporter-htmlextra-timezone "America/Sao_Paulo" \
        --reporter-htmlextra-title ${{ github.event.repository.name }} \
        --reporter-htmlextra-browserTitle ${{ github.event.repository.name }} \
-       --reporter-summary-json-export $ {{ env.REPORT_JSON_PATH }}
+       --reporter-summary-json-export ${{ env.REPORT_JSON_PATH }}
        -- color on \
        ${{ inputs.extra_options }}
     
@@ -95,39 +95,41 @@ jobs:
     #     result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
     #   run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
-  github-page:
-    name: Deploy to GitHub Pages
-    runs-on: ubuntu-latest
-    needs: test-api
+    - uses: GuillaumeFalourd/convert-json-to-env@v1
+      with:
+        json_file: ./$REPORT_JSON_PATH
+    
+    - name: Output summary to console
+      run: echo ${{ env.Run.Stats.Requests.total }}
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download a Artifact
-        uses: actions/download-artifact@v3.0.0
-        with:
-          name: report
-          path: report
+    - uses: mshick/add-pr-comment@v1
+      if: github.event_name == 'pull_request'
+      with:
+        message: |
+          ||executed|failed|
+          |--|--|--|
+          |requests|${{ env.Run.Stats.Requests.total }}|${{ env.Run.Stats.Requests.failed }}|
+          |assertions|${{ env.Run.Stats.Assertions.total }}|${{ env.Run.Stats.Assertions.failed }}|
+          "Total de requisições ${{ steps.data.outputs.total }}"
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+  # github-page:
+  #   name: Deploy to GitHub Pages
+  #   runs-on: ubuntu-latest
+  #   needs: test-api
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download a Artifact
+  #       uses: actions/download-artifact@v3.0.0
+  #       with:
+  #         name: report
+  #         path: report
       
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: report
-
-      - uses: GuillaumeFalourd/convert-json-to-env@v1
-        with:
-          json_file: ./$REPORT_JSON_PATH
-      
-      - name: Output summary to console
-        run: echo ${{ env.Run.Stats.Requests.total }}
-
-      - uses: mshick/add-pr-comment@v1
-        if: github.event_name == 'pull_request'
-        with:
-          message: |
-            ||executed|failed|
-            |--|--|--|
-            |requests|${{ env.Run.Stats.Requests.total }}|${{ env.Run.Stats.Requests.failed }}|
-            |assertions|${{ env.Run.Stats.Assertions.total }}|${{ env.Run.Stats.Assertions.failed }}|
-            "Total de requisições ${{ steps.data.outputs.total }}"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Deploy to GitHub Pages
+  #       uses: peaceiris/actions-gh-pages@v3
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         publish_dir: report
