@@ -102,9 +102,6 @@ jobs:
         filename: ${{ env.REPORT_JSON_PATH }}
         prefix: result
         # masked: true
-    
-    - name: Show output
-      run: echo "The time was ${{ env.result_Stats_Requests_total }}"
 
     - uses: mshick/add-pr-comment@v1
       if: github.event_name == 'pull_request'
