@@ -83,38 +83,43 @@ jobs:
         result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
       run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
-    - uses: mshick/add-pr-comment@v1
-      if: github.event_name == 'pull_request'
+    - uses: GuillaumeFalourd/convert-json-to-env@v1
       with:
-        message: |
-          |Total|Pending|Failed|
-          |--|--|--|
-          |${{ env.result }}|2|2|
-          "Total de requisições ${{ steps.data.outputs.total }}"
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        json_file: ${{ steps.run-newman.outputs.summary }}
+    - run: echo ${{ env.Run.Stats.Requests.total }} #where "key1" is set on the config.json file
+    
+    # - uses: mshick/add-pr-comment@v1
+    #   if: github.event_name == 'pull_request'
+    #   with:
+    #     message: |
+    #       |Total|Pending|Failed|
+    #       |--|--|--|
+    #       |${{ env.result }}|2|2|
+    #       "Total de requisições ${{ steps.data.outputs.total }}"
+    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload relatório da execucao dos testes
-      uses: actions/upload-artifact@v3
-      with: 
-       name: report
-       path: report
-       retention-days: 1
+    # - name: Upload relatório da execucao dos testes
+    #   uses: actions/upload-artifact@v3
+    #   with: 
+    #    name: report
+    #    path: report
+    #    retention-days: 1
 
-  github-page:
-    name: Deploy to GitHub Pages
-    runs-on: ubuntu-latest
-    needs: test-api
+  # github-page:
+  #   name: Deploy to GitHub Pages
+  #   runs-on: ubuntu-latest
+  #   needs: test-api
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download a Artifact
-        uses: actions/download-artifact@v3.0.0
-        with:
-          name: report
-          path: report
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download a Artifact
+  #       uses: actions/download-artifact@v3.0.0
+  #       with:
+  #         name: report
+  #         path: report
       
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: report
+  #     - name: Deploy to GitHub Pages
+  #       uses: peaceiris/actions-gh-pages@v3
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         publish_dir: report
