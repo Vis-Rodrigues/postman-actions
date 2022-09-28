@@ -56,13 +56,14 @@ jobs:
        mkdir -p report
        newman run ${{ env.COLLECTION }} \
        -e ${{ env.ENVIRONMENT }} \
-       -r cli,json,htmlextra \
+       -r cli,json,htmlextra,json-summary \
        --reporter-htmlextra-export report/index.html \
        --reporter-htmlextra-logs \
        --reporter-htmlextra-showEnvironmentData \
        --reporter-htmlextra-timezone "America/Sao_Paulo" \
        --reporter-htmlextra-title ${{ github.event.repository.name }} \
        --reporter-htmlextra-browserTitle ${{ github.event.repository.name }} \
+       --reporter-summary-json-export report/result
        -- color on \
        ${{ inputs.extra_options }}
     
