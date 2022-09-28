@@ -84,8 +84,9 @@ jobs:
       run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
     - uses: GuillaumeFalourd/convert-json-to-env@v1
+      run: "echo ${{ steps.run-newman.outputs.summary }} >> result.json"
       with:
-        json_file: ${{ steps.run-newman.outputs.summary }}
+        json_file: result.json
     - run: echo ${{ env.Run.Stats.Requests.total }} #where "key1" is set on the config.json file
     
     # - uses: mshick/add-pr-comment@v1
