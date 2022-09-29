@@ -49,7 +49,7 @@ jobs:
        npm install -g newman-reporter-json-summary
     
     - name: Testes com Newman
-      id: newman
+      id: newman-run
       continue-on-error: true
       run: |
        mkdir -p report
