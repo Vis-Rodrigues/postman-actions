@@ -7,7 +7,16 @@ on:
     - master
   push:
     branches:
-    - master
+      - master
+    paths:
+      - '**.json'
+
+env:
+  COLLECTION: treinamento-pipeline.postman_collection.json
+  ENVIRONMENT: environment-qa.postman_environment.json
+  REPORT_JSON_PATH: report/result.json
+  MESSAGE: Resultado da última execução dos testes
+  NEWMAN_ARTIFACT: report
 
 jobs:
 
@@ -24,15 +33,24 @@ jobs:
   #   with:
   #     artifact_download: report
 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+      uses: actions/checkout@v3
+
+      - name: Lint Json
+        id: lint-json
+        uses: limitusus/json-syntax-check@v1
+        with:
+
   test-api:
     name: Testes de API com Newman
     runs-on: ubuntu-latest
+    needs: lint-json
     
     steps:
     
-    - name: Checkout Repo
-      uses: actions/checkout@v3
-
     - name: Instalar node
       uses: actions/setup-node@v2
       with: 
@@ -40,39 +58,66 @@ jobs:
     
     - name: Instalar newman
       run: |
-       npm install -g newman newman-reporter-htmlextra @decathlon/newman-reporter-pullrequest-decorator & \
-       npm i newman-reporter-json-summary
+       npm install -g newman 
+       npm install -g newman-reporter-htmlextra
+       npm install -g newman-reporter-json-summary
     
     - name: Testes com Newman
-      id: run-newman
+      id: newman-run
       continue-on-error: true
       run: |
        mkdir -p report
-       newman run treinamento-pipeline.postman_collection.json \
-       -e environment-qa.postman_environment.json \
-       -r cli,junit,json \
-       -r htmlextra --reporter-htmlextra-export report/index.html \
-       -r json-summary --reporter-summary-json-export output \
+       newman run ${{ env.COLLECTION }} \
+       -e ${{ env.ENVIRONMENT }} \
+       -r cli,json,htmlextra,json-summary \
+       --reporter-htmlextra-export ${{ env.NEWMAN_ARTIFACT }}/index.html \
+       --reporter-htmlextra-logs \
+       --reporter-htmlextra-showEnvironmentData \
+       --reporter-htmlextra-timezone "America/Sao_Paulo" \
+       --reporter-htmlextra-title ${{ github.event.repository.name }} \
+       --reporter-htmlextra-browserTitle ${{ github.event.repository.name }} \
+       --reporter-summary-json-export ${{ env.REPORT_JSON_PATH }}
        -- color on \
        ${{ inputs.extra_options }}
-    
-    - name: Output summary to console
-      run: echo ${{ steps.run-newman.outputs.summary }}
-
-    - name: Newman report comment
-      continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: |
-        newman run treinamento-pipeline.postman_collection.json --environment=environment-qa.postman_environment.json \
-        -r @decathlon/pullrequest-decorator \
-        --reporter-export report/index2.html
     
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
       with: 
-       name: report
-       path: report
+       name: ${{ env.NEWMAN_ARTIFACT }}
+       path: ${{ env.NEWMAN_ARTIFACT }}
        retention-days: 1
+
+  comment-pr-newman:
+    
+    runs-on: ubuntu-latest
+    needs: test-api
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download a Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: ${{ env.NEWMAN_ARTIFACT }}
+          path: ${{ env.NEWMAN_ARTIFACT }}
+
+      - name: JSON to variables
+        uses: rgarcia-phi/json-to-variables@v1.1.0
+        with:
+          filename: ${{ env.REPORT_JSON_PATH }}
+          prefix: result
+          # masked: true
+
+      - uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            ### 🚀 ${{ env.MESSAGE }}
+            ||executed|failed|
+            |--:|--:|--:|
+            |requests|${{ env.result_Run_Stats_Requests_total }}|${{ env.result_Run_Stats_Requests_failed }}|
+            |assertions|${{ env.result_Run_Stats_Assertions_total }}|${{ env.result_Run_Stats_Assertions_failed }}|
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   github-page:
     name: Deploy to GitHub Pages
