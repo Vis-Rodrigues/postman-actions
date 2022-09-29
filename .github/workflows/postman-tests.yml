@@ -35,6 +35,7 @@ jobs:
   test-api:
     name: Testes de API com Newman
     runs-on: ubuntu-latest
+    needs: lint-json
     
     steps:
     

@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    id: lint-json
     steps:
       - uses: actions/checkout@v2
       - name: lint-json
