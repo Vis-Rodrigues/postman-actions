@@ -15,6 +15,7 @@ env:
   ENVIRONMENT: environment-qa.postman_environment.json
   REPORT_JSON_PATH: report/result.json
   MESSAGE: Resultado da última execução dos testes
+  NEWMAN_ARTIFACT: report
 
 jobs:
 
@@ -59,7 +60,7 @@ jobs:
        newman run ${{ env.COLLECTION }} \
        -e ${{ env.ENVIRONMENT }} \
        -r cli,json,htmlextra,json-summary \
-       --reporter-htmlextra-export report/index.html \
+       --reporter-htmlextra-export ${{ env.NEWMAN_ARTIFACT }}/index.html \
        --reporter-htmlextra-logs \
        --reporter-htmlextra-showEnvironmentData \
        --reporter-htmlextra-timezone "America/Sao_Paulo" \
@@ -72,8 +73,8 @@ jobs:
     - name: Upload relatório da execucao dos testes
       uses: actions/upload-artifact@v3
       with: 
-       name: report
-       path: report
+       name: ${{ env.NEWMAN_ARTIFACT }}
+       path: ${{ env.NEWMAN_ARTIFACT }}
        retention-days: 1
 
   comment-pr-newman:
@@ -88,8 +89,8 @@ jobs:
       - name: Download a Artifact
         uses: actions/download-artifact@v3.0.0
         with:
-          name: report
-          path: report
+          name: ${{ env.NEWMAN_ARTIFACT }}
+          path: ${{ env.NEWMAN_ARTIFACT }}
 
       - name: JSON to variables
         uses: rgarcia-phi/json-to-variables@v1.1.0
