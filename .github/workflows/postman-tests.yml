@@ -93,24 +93,24 @@ jobs:
     #     result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
     #   run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
 
-    - name: JSON to variables
-      uses: rgarcia-phi/json-to-variables@v1.1.0
-      if: github.event_name == 'pull_request'
-      with:
-        filename: ${{ env.REPORT_JSON_PATH }}
-        prefix: result
-        # masked: true
+    # - name: JSON to variables
+    #   uses: rgarcia-phi/json-to-variables@v1.1.0
+    #   if: github.event_name == 'pull_request'
+    #   with:
+    #     filename: ${{ env.REPORT_JSON_PATH }}
+    #     prefix: result
+    #     # masked: true
 
-    - uses: mshick/add-pr-comment@v1
-      if: github.event_name == 'pull_request'
-      with:
-        message: |
-          ### 🚀 ${{ env.MESSAGE }}
-          ||executed|failed|
-          |--:|--:|--:|
-          |requests|${{ env.result_Run_Stats_Requests_total }}|${{ env.result_Run_Stats_Requests_failed }}|
-          |assertions|${{ env.result_Run_Stats_Assertions_total }}|${{ env.result_Run_Stats_Assertions_failed }}|
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    # - uses: mshick/add-pr-comment@v1
+    #   if: github.event_name == 'pull_request'
+    #   with:
+    #     message: |
+    #       ### 🚀 ${{ env.MESSAGE }}
+    #       ||executed|failed|
+    #       |--:|--:|--:|
+    #       |requests|${{ env.result_Run_Stats_Requests_total }}|${{ env.result_Run_Stats_Requests_failed }}|
+    #       |assertions|${{ env.result_Run_Stats_Assertions_total }}|${{ env.result_Run_Stats_Assertions_failed }}|
+    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   # github-page:
   #   name: Deploy to GitHub Pages
