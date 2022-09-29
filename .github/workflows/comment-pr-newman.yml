@@ -8,6 +8,8 @@ on:
   
 env:
   MESSAGE: Resultado da última execução dos testes
+  REPORT_JSON_PATH: report/result.json
+
 
 jobs:
     
@@ -20,21 +22,21 @@ jobs:
           name: report
           path: report
   
-    - name: JSON to variables
-      uses: rgarcia-phi/json-to-variables@v1.1.0
-      if: github.event_name == 'pull_request'
-      with:
-        filename: ${{ env.REPORT_JSON_PATH }}
-        prefix: result
-        # masked: true
+      - name: JSON to variables
+        uses: rgarcia-phi/json-to-variables@v1.1.0
+        if: github.event_name == 'pull_request'
+        with:
+          filename: ${{ env.REPORT_JSON_PATH }}
+          prefix: result
+          # masked: true
 
-    - uses: mshick/add-pr-comment@v1
-      if: github.event_name == 'pull_request'
-      with:
-        message: |
-          ### 🚀 ${{ env.MESSAGE }}
-          ||executed|failed|
-          |--:|--:|--:|
-          |requests|${{ env.result_Run_Stats_Requests_total }}|${{ env.result_Run_Stats_Requests_failed }}|
-          |assertions|${{ env.result_Run_Stats_Assertions_total }}|${{ env.result_Run_Stats_Assertions_failed }}|
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: mshick/add-pr-comment@v1
+        if: github.event_name == 'pull_request'
+        with:
+          message: |
+            ### 🚀 ${{ env.MESSAGE }}
+            ||executed|failed|
+            |--:|--:|--:|
+            |requests|${{ env.result_Run_Stats_Requests_total }}|${{ env.result_Run_Stats_Requests_failed }}|
+            |assertions|${{ env.result_Run_Stats_Assertions_total }}|${{ env.result_Run_Stats_Assertions_failed }}|
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
