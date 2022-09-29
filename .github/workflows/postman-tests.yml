@@ -73,60 +73,55 @@ jobs:
        path: report
        retention-days: 1
 
-    # - name: Run API Tests
-    #   id: run-newman
-    #   continue-on-error: true
-    #   uses: anthonyvscode/newman-action@v1
-    #   with:
-    #     collection: treinamento-pipeline.postman_collection.json
-    #     environment: environment-qa.postman_environment.json
-    #     reporters: cli
-
-    # - id: data
-    #   uses: gr2m/get-json-paths-action@v1.x
-    #   with:
-    #     json: ${{ steps.run-newman.outputs.summary }}
-    #     total: "Run.Stats.Requests.total"
+  comment-pr-newman:
     
-    # - name: show result 
-    #   env:
-    #     result: ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
-    #   run: "echo Total ${{ steps.data.outputs.json.Run.Stats.Requests.total }}"
-
-    # - name: JSON to variables
-    #   uses: rgarcia-phi/json-to-variables@v1.1.0
-    #   if: github.event_name == 'pull_request'
-    #   with:
-    #     filename: ${{ env.REPORT_JSON_PATH }}
-    #     prefix: result
-    #     # masked: true
-
-    # - uses: mshick/add-pr-comment@v1
-    #   if: github.event_name == 'pull_request'
-    #   with:
-    #     message: |
-    #       ### 🚀 ${{ env.MESSAGE }}
-    #       ||executed|failed|
-    #       |--:|--:|--:|
-    #       |requests|${{ env.result_Run_Stats_Requests_total }}|${{ env.result_Run_Stats_Requests_failed }}|
-    #       |assertions|${{ env.result_Run_Stats_Assertions_total }}|${{ env.result_Run_Stats_Assertions_failed }}|
-    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-  # github-page:
-  #   name: Deploy to GitHub Pages
-  #   runs-on: ubuntu-latest
-  #   needs: test-api
-
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Download a Artifact
-  #       uses: actions/download-artifact@v3.0.0
-  #       with:
-  #         name: report
-  #         path: report
+    runs-on: ubuntu-latest
+    needs: test-api
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - uses: actions/checkout@v3
       
-  #     - name: Deploy to GitHub Pages
-  #       uses: peaceiris/actions-gh-pages@v3
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         publish_dir: report
+      - name: Download a Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: report
+          path: report
+  
+      - name: JSON to variables
+        uses: rgarcia-phi/json-to-variables@v1.1.0
+        if: github.event_name == 'pull_request'
+        with:
+          filename: ${{ env.REPORT_JSON_PATH }}
+          prefix: result
+          # masked: true
+
+      - uses: mshick/add-pr-comment@v1
+        if: github.event_name == 'pull_request'
+        with:
+          message: |
+            ### 🚀 ${{ env.MESSAGE }}
+            ||executed|failed|
+            |--:|--:|--:|
+            |requests|${{ env.result_Run_Stats_Requests_total }}|${{ env.result_Run_Stats_Requests_failed }}|
+            |assertions|${{ env.result_Run_Stats_Assertions_total }}|${{ env.result_Run_Stats_Assertions_failed }}|
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+  github-page:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: test-api
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download a Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: report
+          path: report
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: report
