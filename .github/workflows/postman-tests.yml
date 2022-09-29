@@ -85,6 +85,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - name: Download a Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: report
+          path: report
+
       - name: JSON to variables
         uses: rgarcia-phi/json-to-variables@v1.1.0
         with:
